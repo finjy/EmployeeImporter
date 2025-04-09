@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96 d17.13
+VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeImporter", "EmployeeImporter\EmployeeImporter.csproj", "{5330C762-0E98-4867-BB81-58C04DDFAE3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeImporter.Tests", "EmployeeImporter.Tests\EmployeeImporter.Tests.csproj", "{30C37695-257F-44A3-B6CA-016FAE6ACA48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{5330C762-0E98-4867-BB81-58C04DDFAE3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5330C762-0E98-4867-BB81-58C04DDFAE3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5330C762-0E98-4867-BB81-58C04DDFAE3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30C37695-257F-44A3-B6CA-016FAE6ACA48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30C37695-257F-44A3-B6CA-016FAE6ACA48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30C37695-257F-44A3-B6CA-016FAE6ACA48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30C37695-257F-44A3-B6CA-016FAE6ACA48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

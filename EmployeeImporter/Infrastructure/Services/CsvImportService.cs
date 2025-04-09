@@ -22,6 +22,7 @@ namespace EmployeeImporter.Infrastructure.Services
                 {
                     HasHeaderRecord = true,
                     Delimiter = ",",
+                    TrimOptions = TrimOptions.Trim
                 };
 
                 using var reader = new StreamReader(fileStream);
