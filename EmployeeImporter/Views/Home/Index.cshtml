@@ -1,8 +1,186 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Employee Data Import";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>CSV File Import</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Import" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input type="file" class="form-control" id="fileInput" name="file" accept=".csv" aria-describedby="fileHelpBlock">
+                            <button type="submit" class="btn btn-primary">Import</button>
+                        </div>
+                        <div id="fileHelpBlock" class="form-text">
+                            Only CSV files are accepted
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success mt-3">
+                    @TempData["Success"]
+                </div>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger mt-3">
+                    @TempData["Error"]
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h4>Employee List</h4>
+        </div>
+        <div class="card-body">
+            <table id="employeesTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th class="fs-6">Employee&nbsp;ID</th>
+                        <th class="fs-6">Last&nbsp;Name</th>
+                        <th class="fs-6">First&nbsp;Name</th>
+                        <th class="fs-6">Date&nbsp;of&nbsp;Birth</th>
+                        <th class="fs-6">Phone</th>
+                        <th class="fs-6">Mobile</th>
+                        <th class="fs-6">Address</th>
+                        <th class="fs-6">Address&nbsp;(cont.)</th>
+                        <th class="fs-6">Postal&nbsp;Code</th>
+                        <th class="fs-6">Email</th>
+                        <th class="fs-6">Start&nbsp;Date</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.4/css/select.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowreorder/1.2.8/css/rowReorder.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.2.2/css/fixedHeader.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/4.0.1/css/fixedColumns.bootstrap5.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.3.4/js/dataTables.select.min.js"></script>
+    <script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#employeesTable').DataTable({
+                ajax: {
+                    url: '@Url.Action("GetEmployees", "Home")',
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'payrollNumber' },
+                    { data: 'surname' },
+                    { data: 'forenames' },
+                    {
+                        data: 'dateOfBirth',
+                        render: function(data) {
+                            return data ? new Date(data).toLocaleDateString() : '';
+                        }
+                    },
+                    { data: 'telephone' },
+                    { data: 'mobile' },
+                    { data: 'address' },
+                    { data: 'address2' },
+                    { data: 'postcode' },
+                    { data: 'emailHome' },
+                    {
+                        data: 'startDate',
+                        render: function(data) {
+                            return data ? new Date(data).toLocaleDateString() : '';
+                        }
+                    }
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'excel', 'pdf', 'print'
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/en.json'
+                },
+                responsive: true,
+                order: [[1, 'asc']], // Default sort by surname ascending
+
+                // Cell editing
+                createdRow: function(row, data, dataIndex) {
+                    // Add data-id attribute to the row for identification when updating
+                    $(row).attr('data-id', data.id);
+
+                    // Make cells editable on double-click
+                    $('td', row).attr('contenteditable', true);
+
+                    // Handle editing events
+                    $('td', row).on('blur', function() {
+                        var column = table.cell(this).index().column;
+                        var columnName = table.column(column).dataSrc();
+                        var rowId = $(row).attr('data-id');
+                        var newValue = $(this).text();
+
+                        // Prepare object for sending
+                        var updatedEmployee = { ...data };
+                        updatedEmployee[columnName] = newValue;
+
+                        // Do not allow editing ID
+                        if (columnName === 'id') {
+                            return;
+                        }
+
+                        // Special handling for dates
+                        if (columnName === 'dateOfBirth' || columnName === 'startDate') {
+                            var parsedDate = Date.parse(newValue);
+                            if (!isNaN(parsedDate)) {
+                                updatedEmployee[columnName] = new Date(parsedDate).toISOString();
+                            } else {
+                                // In case of invalid date, revert to old value
+                                $(this).text(data[columnName] ? new Date(data[columnName]).toLocaleDateString() : '');
+                                return;
+                            }
+                        }
+
+                        // Send data to server
+                        $.ajax({
+                            url: '@Url.Action("Update", "Home")',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify(updatedEmployee),
+                            success: function(result) {
+                                console.log('Record successfully updated');
+                                // Update data in table
+                                table.ajax.reload(null, false);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error updating record: ' + error);
+                                // On error, revert changes
+                                $(this).text(data[columnName]);
+                                table.ajax.reload(null, false);
+                            }
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+}

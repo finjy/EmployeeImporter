@@ -52,6 +52,7 @@ namespace EmployeeImporter.Core.Application.Services
             return sortOrder switch
             {
                 "surname_desc" => employees.OrderByDescending(e => e.Surname),
+                "surname_asc" => employees.OrderBy(e => e.Surname),
                 _ => employees.OrderBy(e => e.Surname), // Default: surname ascending
             };
         }
