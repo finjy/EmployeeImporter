@@ -19,14 +19,6 @@ A simple ASP.NET Core MVC application that allows users to import employee data 
 - DataTables.net
 - CsvHelper
 
-## Project Structure
-
-The project follows Clean Architecture principles with three main layers:
-
-- **Core**: Contains domain entities, interfaces, and application services  
-- **Infrastructure**: Implements data access and external services  
-- **Web**: Contains controllers, views, and web-specific models  
-
 ## Getting Started
 
 ### Prerequisites
