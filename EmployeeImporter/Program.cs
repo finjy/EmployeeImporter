@@ -15,6 +15,11 @@ namespace EmployeeImporter
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenAnyIP(80);
+            });
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
@@ -32,6 +37,50 @@ namespace EmployeeImporter
             builder.Services.RegisterDataTables();
 
             var app = builder.Build();
+
+            // Apply migrations at startup
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var logger = services.GetRequiredService<ILogger<Program>>();
+
+                try
+                {
+                    var context = services.GetRequiredService<ApplicationDbContext>();
+
+                    // Await for the database to be available
+                    int retries = 10;
+                    while (retries > 0)
+                    {
+                        try
+                        {
+                            logger.LogInformation("Attempting to connect to database...");
+                            context.Database.OpenConnection();
+                            context.Database.CloseConnection();
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            retries--;
+                            logger.LogWarning($"Failed to connect to database. {retries} retries left. Error: {ex.Message}");
+                            if (retries == 0)
+                            {
+                                logger.LogError("Failed to connect to database after multiple attempts.");
+                                throw;
+                            }
+                            Task.Delay(5000).Wait(); // Pause for 5 seconds before retrying
+                        }
+                    }
+
+                    logger.LogInformation("Connection to database successful. Running migrations...");
+                    context.Database.Migrate();
+                    logger.LogInformation("Migrations applied successfully.");
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "An error occurred while migrating the database.");
+                }
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
