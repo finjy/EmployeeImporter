@@ -9,7 +9,6 @@ A simple ASP.NET Core MVC application that allows users to import employee data 
 - DataTables integration for advanced data display
 - Sorting and searching capabilities
 - Inline editing functionality
-- Responsive design
 
 ## Technology Stack
 
