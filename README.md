@@ -40,8 +40,7 @@ The project follows Clean Architecture principles with three main layers:
 
 1. Clone the repository  
 ```bash
-git clone https://github.com/yourusername/employee-importer.git
-cd employee-importer
+git clone https://github.com/finjy/EmployeeImporter.git
 ```
 
 ### Run with Docker
