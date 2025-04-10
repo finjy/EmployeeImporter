@@ -1,4 +1,4 @@
-  # Employee Data Importer
+# Employee Data Importer
 
 A simple ASP.NET Core MVC application that allows users to import employee data from CSV files, store it in a SQL Server database, and manage the data through an interactive web interface.
 
@@ -23,66 +23,79 @@ A simple ASP.NET Core MVC application that allows users to import employee data 
 
 The project follows Clean Architecture principles with three main layers:
 
-- **Core**: Contains domain entities, interfaces, and application services
-- **Infrastructure**: Implements data access and external services
-- **Web**: Contains controllers, views, and web-specific models
+- **Core**: Contains domain entities, interfaces, and application services  
+- **Infrastructure**: Implements data access and external services  
+- **Web**: Contains controllers, views, and web-specific models  
 
 ## Getting Started
 
 ### Prerequisites
 
-- .NET 8 SDK
-- SQL Server (or SQL Server Express)
-- Visual Studio 2022 or Visual Studio Code
+- .NET 8 SDK  
+- Docker  
+- SQL Server (or use the Dockerized version)  
+- Visual Studio 2022 or Visual Studio Code  
 
 ### Installation
 
-1. Clone the repository
+1. Clone the repository  
 ```bash
 git clone https://github.com/yourusername/employee-importer.git
 cd employee-importer
 ```
-2. Update the connection string in appsettings.json to point to your SQL Server instance
-3. Run the Entity Framework migrations to create the database
+
+### Run with Docker
+
+1. Make sure Docker Desktop is running  
+2. In the project root directory, build and run the containers:  
 ```bash
-bashdotnet ef database update
+docker-compose up --build
 ```
-4. Build and run the application
-```bash
-bashdotnet build
-dotnet run
-```
-5. Navigate to https://localhost:5001 or http://localhost:5000 in your web browser
+3. Open your browser and go to:  
+- http://localhost:8080
+
+The SQL Server container will be created automatically, and the application will apply database migrations on startup.
+
+### Run from Visual Studio
+
+1. Open the solution in Visual Studio  
+2. Ensure that **EmployeeImporter.Web** is set as the startup project  
+3. Run the project with IIS Express or Kestrel  
+4. The database connection string in `appsettings.Development.json` should point to your local SQL Server instance  
+5. Migrations will be applied automatically at startup
 
 ## Usage
 
-1. On the main page, use the "Browse File" button to select a CSV file
-2. Click "Import" to process the file
-3. The application will display the number of successfully processed records
-4. Use the table below to view, sort, search, and edit the imported data
-    - Click on column headers to sort
-    - Use the search box to filter records
-    - Double-click on a cell to edit its value
+1. On the main page, use the "Browse File" button to select a CSV file  
+2. Click "Import" to process the file  
+3. The application will display the number of successfully processed records  
+4. Use the table below to view, sort, search, and edit the imported data  
+    - Click on column headers to sort  
+    - Use the search box to filter records  
+    - Double-click on a cell to edit its value  
 
 ## CSV File Format
+
 The application expects CSV files with the following headers:
-  - Personnel_Records.Payroll_Number
-  - Personnel_Records.Forenames
-  - Personnel_Records.Surname
-  - Personnel_Records.Date_of_Birth
-  - Personnel_Records.Telephone
-  - Personnel_Records.Mobile
-  - Personnel_Records.Address
-  - Personnel_Records.Address_2
-  - Personnel_Records.Postcode
-  - Personnel_Records.EMail_Home
-  - Personnel_Records.Start_Date
+  - Personnel_Records.Payroll_Number  
+  - Personnel_Records.Forenames  
+  - Personnel_Records.Surname  
+  - Personnel_Records.Date_of_Birth  
+  - Personnel_Records.Telephone  
+  - Personnel_Records.Mobile  
+  - Personnel_Records.Address  
+  - Personnel_Records.Address_2  
+  - Personnel_Records.Postcode  
+  - Personnel_Records.EMail_Home  
+  - Personnel_Records.Start_Date  
 
 ## Testing
-Run the included unit tests with:
+
+Run the included unit tests with:  
 ```bash
-bashdotnet test
+dotnet test
 ```
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+
+This project is licensed under the MIT License.
