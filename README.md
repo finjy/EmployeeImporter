@@ -58,7 +58,7 @@ The SQL Server container will be created automatically, and the application will
 ### Run from Visual Studio
 
 1. Open the solution in Visual Studio  
-2. Ensure that **EmployeeImporter.Web** is set as the startup project  
+2. Ensure that **EmployeeImporter** is set as the startup project  
 3. Run the project with IIS Express or Kestrel  
 4. The database connection string in `appsettings.Development.json` should point to your local SQL Server instance  
 5. Migrations will be applied automatically at startup
